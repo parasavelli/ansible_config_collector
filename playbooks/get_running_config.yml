@@ -1,0 +1,25 @@
+---
+# === Real devices play (for cisco, arista groups) ===
+- name: Collect running configs from real devices
+  hosts: all:!local
+  gather_facts: no
+  vars:
+    output_dir: "../output"
+    date: "{{ lookup('pipe', 'date +%Y-%m-%d') }}"
+  roles:
+    - collect_config
+
+# === Local dev mode (for testing output formatting) ===
+- name: Simulate show config (dev mode)
+  hosts: local
+  gather_facts: no
+  vars:
+    date: "{{ lookup('pipe', 'date +%Y-%m-%d') }}"
+  tasks:
+    - name: Generate fake config
+      copy:
+        content: |
+          hostname cisco-sw1
+          interface GigabitEthernet0/1
+            no shutdown
+        dest: "./output/cisco-sw1-{{ date }}.cfg"
