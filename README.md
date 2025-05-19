@@ -1,0 +1,2 @@
+# ansible_config_collector
+ansible_config_collector
